@@ -1,0 +1,1 @@
+# indeed_auto_apply_chrome_extention
