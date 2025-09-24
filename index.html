@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Auto Job Apply</title>
+    <script type="module" src="index.js" defer></script>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="timeline-container">
+      <div class="header">
+        <h1>Auto Job Apply</h1>
+        <p><a href="https://buymeacoffee.com/tek_drift" target="_blank" rel="noopener noreferrer">☕ Buy me a coffee</a></p>
+      </div>
+
+      <!-- start / continue btn -->
+      <div class="button-container">
+        <button id="start-btn" class="start-btn">Start &#10003;</button>
+        <button id="stop-btn" class="stop-btn">Stop &#10005;</button>
+        <a id="settings-btn" class="settings-btn" href="settings.html">Settings &#9881;</a>
+      </div>
+      <!-- Status Display for Live Updates -->
+      <div class="status-section">
+        <div class="status-item">
+          <div class="status-message info">
+            LIVE STATUS
+            <span
+              id="status-indicator-red"
+              class="status-dot red"
+              style="display: none"
+            ></span>
+            <span id="status-indicator-grey" class="status-dot grey"></span>
+          </div>
+        </div>
+        <div class="status-item">
+          <div id="status" class="status-message">
+            Ready for job applications...
+          </div>
+        </div>
+        <div class="status-item">
+          <div
+            id="status-time"
+            class="status-message"
+            style="font-size: 12px; color: #6b7280"
+          ></div>
+        </div>
+      </div>
+      <div class="feed-container" id="feed-container">
+        <!-- Timeline entries will be dynamically added here -->
+      </div>
+      
+      <!-- Debug Logs Section -->
+      <div class="debug-section">
+        <div class="debug-header">
+          <h3>🐛 Debug Logs</h3>
+          <div class="debug-controls">
+            <button id="refresh-logs-btn" class="debug-btn">🔄 Refresh</button>
+            <button id="clear-logs-btn" class="debug-btn">🗑️ Clear</button>
+            <button id="export-logs-btn" class="debug-btn">📄 Export</button>
+          </div>
+        </div>
+        <div class="debug-filters">
+          <select id="log-level-filter">
+            <option value="">All Levels</option>
+            <option value="INFO">Info</option>
+            <option value="WARN">Warning</option>
+            <option value="ERROR">Error</option>
+          </select>
+          <select id="log-category-filter">
+            <option value="">All Categories</option>
+            <option value="AUTOMATION">Automation</option>
+            <option value="MESSAGE">Messages</option>
+            <option value="STARTUP">Startup</option>
+            <option value="INIT">Initialization</option>
+            <option value="ERROR">Errors</option>
+          </select>
+        </div>
+        <div class="debug-logs" id="debug-logs">
+          <div class="log-loading">Loading logs...</div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

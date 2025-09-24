@@ -1,0 +1,77 @@
+{
+  "manifest_version": 3,
+  "name": "Auto Job Apply",
+  "short_name": "AutoApply",
+  "version": "1.0.0",
+  "description": "AI-powered job application automation for Indeed with intelligent form filling and real-time tracking",
+
+  "icons": {
+    "16": "logo.png",
+    "32": "logo.png",
+    "48": "logo.png",
+    "128": "logo.png"
+  },
+
+  "action": {
+    "default_popup": "index.html",
+    "default_title": "Auto Job Apply",
+    "default_icon": {
+      "16": "logo.png",
+      "32": "logo.png",
+      "48": "logo.png",
+      "128": "logo.png"
+    }
+  },
+
+  "options_ui": {
+    "page": "settings.html",
+    "open_in_tab": true
+  },
+
+  "permissions": ["storage", "scripting", "activeTab", "tabs"],
+
+  "host_permissions": [
+    "*://*.indeed.com/*",
+    "*://*.indeed.ca/*",
+    "*://*.indeed.co.uk/*",
+    "*://*.indeed.co.in/*",
+    "*://*.indeed.com.au/*",
+    "*://*.indeed.de/*",
+    "*://*.indeed.fr/*"
+  ],
+
+  "background": {
+    "service_worker": "background.js"
+  },
+
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*.indeed.com/*",
+        "*://*.indeed.ca/*",
+        "*://*.indeed.co.uk/*",
+        "*://*.indeed.co.in/*",
+        "*://*.indeed.com.au/*",
+        "*://*.indeed.de/*",
+        "*://*.indeed.fr/*"
+      ],
+      "js": [ "content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+
+  "web_accessible_resources": [
+    {
+      "resources": ["questions_config.json"],
+      "matches": [
+        "*://*.indeed.com/*",
+        "*://*.indeed.ca/*",
+        "*://*.indeed.co.uk/*",
+        "*://*.indeed.co.in/*",
+        "*://*.indeed.com.au/*",
+        "*://*.indeed.de/*",
+        "*://*.indeed.fr/*"
+      ]
+    }
+  ]
+}
