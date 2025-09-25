@@ -55,6 +55,29 @@ class Messaging {
     }
 }
 
+class Storage{
+
+    static clear(callback) {
+        chrome.storage.local.clear(() => {
+            if (callback) callback();
+        });
+    }
+    // Retrieve data from chrome.storage.local
+    static get(key, callback) {
+        chrome.storage.local.get([key], (result) => {
+            if (callback) callback(result[key]);
+        });
+    }
+    // Save data to chrome.storage.local
+    static save(key, value, callback) {
+        const data = {};
+        data[key] = value;
+        chrome.storage.local.set(data, () => {
+            if (callback) callback();
+        });
+    }
+}
+
 
 
 
@@ -62,6 +85,12 @@ Messaging.onMessage((message, sender, sendResponse) => {
     console.log('Received message in content script:', message);
     if (message.action === "jobData") {
         console.log("Job data received in background script:", message.data);
-        sendResponse({ status: "Job data received" });
+        // Overwrite the 'que' key with the latest job data
+        Storage.save('que', message.data, () => {
+            console.log("Queue in storage overwritten with:", message.data);
+            sendResponse({ status: "Job data received and stored" });
+        });
+        return true; // For async sendResponse
     }
+    
 });
