@@ -179,3 +179,10 @@ Messaging.receive(async (request, sender, sendResponse) => {
 });
 })();
 
+(async() => {
+    Messaging.receive(async (request, sender, sendResponse) => {
+        if (request.action === "fillJob") {
+            console.log("Filling job application for:", request.data);
+        }
+    });
+})();
