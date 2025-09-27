@@ -71,7 +71,7 @@ class Storage {
 }
 
 Messaging.onMessage((message, sender, sendResponse) => {
-  console.log("Received message in content script:", message);
+  console.log("Received message in background script:", message);
   if (message.action === "jobData") {
     console.log("Job data received in background script:", message.data);
     Storage.save("que", message.data, () => {
@@ -79,19 +79,17 @@ Messaging.onMessage((message, sender, sendResponse) => {
     });
 
     // Sequentially process jobs
-    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+    chrome.tabs.query({ active: true, currentWindow: true }, async function (tabs) {
       const tabId = tabs[0].id;
       for (let job of message.data) {
-        (async () => {
-          console.log("Processing job:", job);
-          const result = await sendJobAndWaitForResult(job, tabId);
-          console.log("Result for job", job, ":", result);
-        })();
+        console.log("Processing job:", job);
+        const result = await sendJobAndWaitForResult(job, tabId);
+        console.log("Result for job", job, ":", result);
         // You can add more logic here (e.g., update status, send to server)
       }
+      sendResponse({ status: "All jobs processed" });
     });
 
-    sendResponse({ status: "All jobs processed" });
     return true; // For async sendResponse
   }
 });
@@ -101,12 +99,14 @@ function sendJobAndWaitForResult(job,tabId) {
   return new Promise((resolve) => {
     // Send job to content script
     Messaging.sendToTab(tabId, { action: "fillJob", data: job });
-    // Listen for result
-    Messaging.onMessage((message, sender, sendResponse) => {
+    // Listen for result (one-time listener)
+    function handler(message, sender, sendResponse) {
       if (message.action === "jobFilled" && message.jobId === job.id) {
         resolve(message.result);
+        chrome.runtime.onMessage.removeListener(handler); // Clean up
       }
-      return true; // For async sendResponse
-    });
+      return true;
+    }
+    chrome.runtime.onMessage.addListener(handler);
   });
 }
